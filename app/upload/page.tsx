@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback, useRef, useEffect } from "react";
+import React, { useState, useCallback, useRef, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -76,7 +76,7 @@ const PROCESSING_STEPS = [
     { icon: Volume2, label: "Narrate", desc: "Voice audio" },
 ];
 
-export default function UploadPage() {
+function UploadPageContent() {
     const searchParams = useSearchParams();
     const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -620,5 +620,33 @@ export default function UploadPage() {
                 </div>
             </div>
         </DashboardLayout>
+    );
+}
+
+function UploadPageLoading() {
+    return (
+        <DashboardLayout>
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="animate-pulse">
+                    <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-48 mb-4"></div>
+                    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-72 mb-8"></div>
+                    <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-12">
+                        <div className="flex flex-col items-center">
+                            <div className="h-24 w-24 bg-gray-200 dark:bg-gray-700 rounded-3xl mb-8"></div>
+                            <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-64 mb-4"></div>
+                            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-96"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </DashboardLayout>
+    );
+}
+
+export default function UploadPage() {
+    return (
+        <Suspense fallback={<UploadPageLoading />}>
+            <UploadPageContent />
+        </Suspense>
     );
 }
