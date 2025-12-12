@@ -2,7 +2,7 @@
 
 AI-powered learning platform that transforms documents into bite-sized, audio-narrated lessons for workplace learning.
 
-[![Next.js](https://img.shields.io/badge/Next.js-16.0-000000?logo=next.js)](https://nextjs.org)
+[![Next.js](https://img.shields.io/badge/Next.js-14.0-000000?logo=next.js)](https://nextjs.org)
 [![React](https://img.shields.io/badge/React-19.2-61DAFB?logo=react)](https://react.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?logo=typescript)](https://typescriptlang.org)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.0-06B6D4?logo=tailwindcss)](https://tailwindcss.com)
@@ -11,7 +11,7 @@ AI-powered learning platform that transforms documents into bite-sized, audio-na
 
 ## Overview
 
-Cognify Frontend is a modern Next.js 16 application providing an intuitive interface for AI-powered document learning. Users can upload documents, view extracted themes, listen to auto-generated audio lessons, and track their learning progress.
+Cognify Frontend is a modern Next.js 14 application providing an intuitive interface for AI-powered document learning. Users can upload documents, view extracted themes, listen to auto-generated audio lessons, and track their learning progress.
 
 ### Key Features
 
@@ -31,7 +31,7 @@ Cognify Frontend is a modern Next.js 16 application providing an intuitive inter
 
 | Component | Technology | Purpose |
 |-----------|------------|---------|
-| **Framework** | Next.js 16 | App Router, SSR/CSR, file-based routing |
+| **Framework** | Next.js 14 | App Router, SSR/CSR, file-based routing |
 | **UI Library** | React 19 | Component-based UI |
 | **Language** | TypeScript 5 | Type-safe development |
 | **Styling** | Tailwind CSS 4 | Utility-first CSS framework |
