@@ -1,0 +1,137 @@
+{
+  "common": {
+    "save": "Änderungen Speichern",
+    "saving": "Speichern...",
+    "saved": "Gespeichert!",
+    "cancel": "Abbrechen",
+    "delete": "Löschen",
+    "retry": "Wiederholen",
+    "loading": "Laden...",
+    "error": "Fehler",
+    "success": "Erfolg"
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "subtitle": "Verwalten Sie Ihr Konto und Ihre Präferenzen",
+    "profile": {
+      "title": "Profil",
+      "description": "Ihre persönlichen Informationen",
+      "fullName": "Vollständiger Name",
+      "email": "E-Mail",
+      "role": "Position",
+      "company": "Unternehmen"
+    },
+    "appearance": {
+      "title": "Erscheinungsbild",
+      "description": "Passen Sie das Aussehen von Cognify an",
+      "theme": "Design",
+      "light": "Hell",
+      "dark": "Dunkel",
+      "system": "System",
+      "language": "Sprache",
+      "languageDescription": "Wählen Sie Ihre bevorzugte Sprache"
+    },
+    "learning": {
+      "title": "Lernpräferenzen",
+      "description": "Passen Sie Ihr Lernerlebnis an",
+      "autoPlayAudio": "Automatische Wiedergabe",
+      "autoPlayAudioDescription": "Lektions-Erzählung automatisch abspielen",
+      "playbackSpeed": "Wiedergabegeschwindigkeit",
+      "playbackSpeedDescription": "Standard-Wiedergabegeschwindigkeit"
+    },
+    "notifications": {
+      "title": "Benachrichtigungen",
+      "description": "Verwalten Sie, wie Sie Updates erhalten",
+      "emailNotifications": "E-Mail-Benachrichtigungen",
+      "emailNotificationsDescription": "Erhalten Sie wichtige Updates per E-Mail",
+      "pushNotifications": "Push-Benachrichtigungen",
+      "pushNotificationsDescription": "Erhalten Sie Browser-Benachrichtigungen",
+      "lessonReminders": "Lektions-Erinnerungen",
+      "lessonRemindersDescription": "Werden Sie benachrichtigt, wenn eine Lektion bereit ist",
+      "weeklyDigest": "Wöchentliche Zusammenfassung",
+      "weeklyDigestDescription": "Zusammenfassung Ihres Lernfortschritts",
+      "marketingEmails": "Marketing-E-Mails",
+      "marketingEmailsDescription": "Erhalten Sie Produkt-Updates und Angebote"
+    },
+    "security": {
+      "title": "Sicherheit",
+      "description": "Halten Sie Ihr Konto sicher",
+      "changePassword": "Passwort ändern",
+      "changePasswordDescription": "Aktualisieren Sie Ihr Passwort regelmäßig",
+      "twoFactor": "Zwei-Faktor-Authentifizierung",
+      "twoFactorDescription": "Fügen Sie Ihrem Konto zusätzliche Sicherheit hinzu",
+      "currentPassword": "Aktuelles Passwort",
+      "newPassword": "Neues Passwort",
+      "confirmPassword": "Neues Passwort Bestätigen",
+      "passwordMismatch": "Die Passwörter stimmen nicht überein",
+      "passwordTooShort": "Das Passwort muss mindestens 8 Zeichen lang sein"
+    },
+    "danger": {
+      "title": "Gefahrenzone",
+      "description": "Unwiderrufliche Aktionen",
+      "deleteAccount": "Konto löschen",
+      "deleteAccountDescription": "Löschen Sie Ihr Konto und alle Daten dauerhaft",
+      "deleteButton": "Konto Löschen",
+      "deleteConfirmTitle": "Konto Löschen",
+      "deleteConfirmMessage": "Diese Aktion kann nicht rückgängig gemacht werden. Dadurch werden Ihr Konto und alle Ihre Daten dauerhaft von unseren Servern gelöscht.",
+      "deleteConfirmLabel": "Geben Sie DELETE ein, um zu bestätigen"
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Willkommen zurück",
+    "recentDocuments": "Aktuelle Dokumente",
+    "quickAccess": "Schnellzugriff",
+    "uploadDocument": "Dokument Hochladen",
+    "viewAll": "Alle Anzeigen",
+    "noDocuments": "Noch keine Dokumente",
+    "startLearning": "Lernen Beginnen"
+  },
+  "documents": {
+    "title": "Dokumente",
+    "upload": "Hochladen",
+    "search": "Dokumente suchen...",
+    "filter": "Filtern",
+    "sort": "Sortieren",
+    "noResults": "Keine Dokumente gefunden",
+    "processing": "Verarbeitung...",
+    "ready": "Bereit",
+    "failed": "Fehlgeschlagen"
+  },
+  "lessons": {
+    "title": "Lektionen",
+    "continue": "Fortsetzen",
+    "start": "Starten",
+    "completed": "Abgeschlossen",
+    "inProgress": "In Bearbeitung",
+    "notStarted": "Nicht Begonnen",
+    "duration": "Dauer",
+    "progress": "Fortschritt"
+  },
+  "history": {
+    "title": "Lernverlauf",
+    "noHistory": "Noch kein Lernverlauf",
+    "startLearning": "Beginnen Sie zu lernen, um Ihren Verlauf aufzubauen"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "uploadDocument": "Dokument Hochladen",
+    "myDocuments": "Meine Dokumente",
+    "documents": "Dokumente",
+    "lessons": "Lektionen",
+    "history": "Lernverlauf",
+    "settings": "Einstellungen",
+    "logout": "Abmelden",
+    "profile": "Profil"
+  },
+  "auth": {
+    "signIn": "Anmelden",
+    "signUp": "Registrieren",
+    "signOut": "Abmelden",
+    "email": "E-Mail",
+    "password": "Passwort",
+    "forgotPassword": "Passwort vergessen?",
+    "noAccount": "Sie haben noch kein Konto?",
+    "hasAccount": "Sie haben bereits ein Konto?"
+  }
+}

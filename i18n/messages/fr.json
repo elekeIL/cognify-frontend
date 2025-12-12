@@ -1,0 +1,137 @@
+{
+  "common": {
+    "save": "Enregistrer",
+    "saving": "Enregistrement...",
+    "saved": "Enregistré!",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "retry": "Réessayer",
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "success": "Succès"
+  },
+  "settings": {
+    "title": "Paramètres",
+    "subtitle": "Gérez votre compte et vos préférences",
+    "profile": {
+      "title": "Profil",
+      "description": "Vos informations personnelles",
+      "fullName": "Nom Complet",
+      "email": "E-mail",
+      "role": "Fonction",
+      "company": "Entreprise"
+    },
+    "appearance": {
+      "title": "Apparence",
+      "description": "Personnalisez l'apparence de Cognify",
+      "theme": "Thème",
+      "light": "Clair",
+      "dark": "Sombre",
+      "system": "Système",
+      "language": "Langue",
+      "languageDescription": "Choisissez votre langue préférée"
+    },
+    "learning": {
+      "title": "Préférences d'Apprentissage",
+      "description": "Personnalisez votre expérience d'apprentissage",
+      "autoPlayAudio": "Lecture automatique",
+      "autoPlayAudioDescription": "Lire automatiquement la narration des leçons",
+      "playbackSpeed": "Vitesse de lecture",
+      "playbackSpeedDescription": "Vitesse de lecture par défaut"
+    },
+    "notifications": {
+      "title": "Notifications",
+      "description": "Gérez comment vous recevez les mises à jour",
+      "emailNotifications": "Notifications par e-mail",
+      "emailNotificationsDescription": "Recevez les mises à jour importantes par e-mail",
+      "pushNotifications": "Notifications push",
+      "pushNotificationsDescription": "Recevez des notifications dans le navigateur",
+      "lessonReminders": "Rappels de leçons",
+      "lessonRemindersDescription": "Soyez notifié quand une leçon est prête",
+      "weeklyDigest": "Résumé hebdomadaire",
+      "weeklyDigestDescription": "Résumé de votre progression d'apprentissage",
+      "marketingEmails": "E-mails marketing",
+      "marketingEmailsDescription": "Recevez des mises à jour et offres de produits"
+    },
+    "security": {
+      "title": "Sécurité",
+      "description": "Gardez votre compte sécurisé",
+      "changePassword": "Changer le mot de passe",
+      "changePasswordDescription": "Mettez à jour votre mot de passe régulièrement",
+      "twoFactor": "Authentification à deux facteurs",
+      "twoFactorDescription": "Ajoutez une sécurité supplémentaire à votre compte",
+      "currentPassword": "Mot de Passe Actuel",
+      "newPassword": "Nouveau Mot de Passe",
+      "confirmPassword": "Confirmer le Nouveau Mot de Passe",
+      "passwordMismatch": "Les mots de passe ne correspondent pas",
+      "passwordTooShort": "Le mot de passe doit contenir au moins 8 caractères"
+    },
+    "danger": {
+      "title": "Zone de Danger",
+      "description": "Actions irréversibles",
+      "deleteAccount": "Supprimer le compte",
+      "deleteAccountDescription": "Supprimez définitivement votre compte et toutes les données",
+      "deleteButton": "Supprimer le Compte",
+      "deleteConfirmTitle": "Supprimer le Compte",
+      "deleteConfirmMessage": "Cette action est irréversible. Cela supprimera définitivement votre compte et toutes vos données de nos serveurs.",
+      "deleteConfirmLabel": "Tapez DELETE pour confirmer"
+    }
+  },
+  "dashboard": {
+    "title": "Tableau de Bord",
+    "welcome": "Bon retour",
+    "recentDocuments": "Documents Récents",
+    "quickAccess": "Accès Rapide",
+    "uploadDocument": "Télécharger un Document",
+    "viewAll": "Voir Tout",
+    "noDocuments": "Pas encore de documents",
+    "startLearning": "Commencer à Apprendre"
+  },
+  "documents": {
+    "title": "Documents",
+    "upload": "Télécharger",
+    "search": "Rechercher des documents...",
+    "filter": "Filtrer",
+    "sort": "Trier",
+    "noResults": "Aucun document trouvé",
+    "processing": "Traitement...",
+    "ready": "Prêt",
+    "failed": "Échoué"
+  },
+  "lessons": {
+    "title": "Leçons",
+    "continue": "Continuer",
+    "start": "Commencer",
+    "completed": "Terminé",
+    "inProgress": "En Cours",
+    "notStarted": "Non Commencé",
+    "duration": "Durée",
+    "progress": "Progression"
+  },
+  "history": {
+    "title": "Historique d'Apprentissage",
+    "noHistory": "Pas encore d'historique d'apprentissage",
+    "startLearning": "Commencez à apprendre pour construire votre historique"
+  },
+  "nav": {
+    "dashboard": "Tableau de Bord",
+    "uploadDocument": "Télécharger un Document",
+    "myDocuments": "Mes Documents",
+    "documents": "Documents",
+    "lessons": "Leçons",
+    "history": "Historique d'Apprentissage",
+    "settings": "Paramètres",
+    "logout": "Déconnexion",
+    "profile": "Profil"
+  },
+  "auth": {
+    "signIn": "Connexion",
+    "signUp": "Inscription",
+    "signOut": "Déconnexion",
+    "email": "E-mail",
+    "password": "Mot de Passe",
+    "forgotPassword": "Mot de passe oublié?",
+    "noAccount": "Vous n'avez pas de compte?",
+    "hasAccount": "Vous avez déjà un compte?"
+  }
+}

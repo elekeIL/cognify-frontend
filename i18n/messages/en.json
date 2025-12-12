@@ -1,0 +1,137 @@
+{
+  "common": {
+    "save": "Save Changes",
+    "saving": "Saving...",
+    "saved": "Saved!",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "retry": "Retry",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success"
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Manage your account and preferences",
+    "profile": {
+      "title": "Profile",
+      "description": "Your personal information",
+      "fullName": "Full Name",
+      "email": "Email",
+      "role": "Role",
+      "company": "Company"
+    },
+    "appearance": {
+      "title": "Appearance",
+      "description": "Customize how Cognify looks",
+      "theme": "Theme",
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System",
+      "language": "Language",
+      "languageDescription": "Choose your preferred language"
+    },
+    "learning": {
+      "title": "Learning Preferences",
+      "description": "Customize your learning experience",
+      "autoPlayAudio": "Auto-play audio",
+      "autoPlayAudioDescription": "Automatically play lesson narration",
+      "playbackSpeed": "Playback speed",
+      "playbackSpeedDescription": "Default audio playback speed"
+    },
+    "notifications": {
+      "title": "Notifications",
+      "description": "Manage how you receive updates",
+      "emailNotifications": "Email notifications",
+      "emailNotificationsDescription": "Receive important updates via email",
+      "pushNotifications": "Push notifications",
+      "pushNotificationsDescription": "Receive browser push notifications",
+      "lessonReminders": "Lesson reminders",
+      "lessonRemindersDescription": "Get notified when a lesson is ready",
+      "weeklyDigest": "Weekly digest",
+      "weeklyDigestDescription": "Summary of your learning progress",
+      "marketingEmails": "Marketing emails",
+      "marketingEmailsDescription": "Receive product updates and offers"
+    },
+    "security": {
+      "title": "Security",
+      "description": "Keep your account secure",
+      "changePassword": "Change password",
+      "changePasswordDescription": "Update your password regularly",
+      "twoFactor": "Two-factor authentication",
+      "twoFactorDescription": "Add extra security to your account",
+      "currentPassword": "Current Password",
+      "newPassword": "New Password",
+      "confirmPassword": "Confirm New Password",
+      "passwordMismatch": "New passwords don't match",
+      "passwordTooShort": "Password must be at least 8 characters"
+    },
+    "danger": {
+      "title": "Danger Zone",
+      "description": "Irreversible actions",
+      "deleteAccount": "Delete account",
+      "deleteAccountDescription": "Permanently delete your account and all data",
+      "deleteButton": "Delete Account",
+      "deleteConfirmTitle": "Delete Account",
+      "deleteConfirmMessage": "This action cannot be undone. This will permanently delete your account and remove all your data from our servers.",
+      "deleteConfirmLabel": "Type DELETE to confirm"
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome back",
+    "recentDocuments": "Recent Documents",
+    "quickAccess": "Quick Access",
+    "uploadDocument": "Upload Document",
+    "viewAll": "View All",
+    "noDocuments": "No documents yet",
+    "startLearning": "Start Learning"
+  },
+  "documents": {
+    "title": "Documents",
+    "upload": "Upload",
+    "search": "Search documents...",
+    "filter": "Filter",
+    "sort": "Sort",
+    "noResults": "No documents found",
+    "processing": "Processing...",
+    "ready": "Ready",
+    "failed": "Failed"
+  },
+  "lessons": {
+    "title": "Lessons",
+    "continue": "Continue",
+    "start": "Start",
+    "completed": "Completed",
+    "inProgress": "In Progress",
+    "notStarted": "Not Started",
+    "duration": "Duration",
+    "progress": "Progress"
+  },
+  "history": {
+    "title": "Learning History",
+    "noHistory": "No learning history yet",
+    "startLearning": "Start learning to build your history"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "uploadDocument": "Upload Document",
+    "myDocuments": "My Documents",
+    "documents": "Documents",
+    "lessons": "Lessons",
+    "history": "Learning History",
+    "settings": "Settings",
+    "logout": "Log out",
+    "profile": "Profile"
+  },
+  "auth": {
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "signOut": "Sign Out",
+    "email": "Email",
+    "password": "Password",
+    "forgotPassword": "Forgot password?",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?"
+  }
+}
