@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npm run build:*)",
+      "Bash(find:*)",
+      "Bash(ls:*)",
+      "Bash(cat:*)",
+      "Bash(git checkout:*)",
+      "Bash(grep:*)",
+      "Bash(python update_lessons_api.py:*)",
+      "Bash(python update_history_page.py:*)",
+      "Bash(python add_activity_logging.py:*)",
+      "Bash(python update_outcomes.py:*)",
+      "Bash(python:*)",
+      "Bash(npm install:*)",
+      "Skill(document-skills:pptx)",
+      "Bash(node create-pptx.js:*)",
+      "Bash(npm init:*)",
+      "Bash(npx playwright install:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push)"
+    ]
+  }
+}

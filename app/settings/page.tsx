@@ -637,7 +637,7 @@ export default function SettingsPage() {
         setTheme(newTheme);
     };
 
-    const handleLanguageChange = (newLanguage: string) => {
+    const handleLanguageChange = (newLanguage: "en" | "es" | "fr" | "de") => {
         setProfileForm(prev => ({ ...prev, language: newLanguage }));
         // Immediately apply language for visual feedback
         setLocale(newLanguage as Locale);
@@ -795,7 +795,7 @@ export default function SettingsPage() {
                             description={t("appearance.languageDescription")}
                             value={profileForm.language}
                             options={Object.entries(localeNames).map(([value, label]) => ({ value, label }))}
-                            onChange={handleLanguageChange}
+                            onChange={(val) => handleLanguageChange(val as "en" | "es" | "fr" | "de")}
                         />
                     </div>
                 </SettingsSection>
