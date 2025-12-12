@@ -522,7 +522,7 @@ export default function SettingsPage() {
                 full_name: settings.profile.full_name || "",
                 company: settings.profile.company || "",
                 role: settings.profile.role || "",
-                language: settings.profile.language || "en",
+                language: (settings.profile.language as "en" | "es" | "fr" | "de") || "en",
             });
             setNotificationForm({
                 email_notifications: settings.notifications.email_notifications,
