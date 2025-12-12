@@ -7,7 +7,9 @@ const BACKEND_BASE_URL = API_BASE_URL.replace('/api/v1', '');
 
 /**
  * Converts a relative static URL from the backend to an absolute URL.
- * Example: "/static/audio/audio_123.mp3" -> "http://localhost:8000/static/audio/audio_123.mp3"
+ * Handles both formats:
+ * - "/static/audio/audio_123.mp3" -> "http://backend/static/audio/audio_123.mp3"
+ * - "uploads/audio/audio_123.mp3" -> "http://backend/static/audio/audio_123.mp3"
  */
 export const getStaticUrl = (relativePath: string | undefined | null): string | null => {
   if (!relativePath) return null;
@@ -15,6 +17,13 @@ export const getStaticUrl = (relativePath: string | undefined | null): string | 
   if (relativePath.startsWith('http://') || relativePath.startsWith('https://')) {
     return relativePath;
   }
+
+  // Handle audio_path format: "uploads/audio/filename.mp3" -> "/static/audio/filename.mp3"
+  if (relativePath.includes('uploads/audio/')) {
+    const filename = relativePath.split('/').pop();
+    return `${BACKEND_BASE_URL}/static/audio/${filename}`;
+  }
+
   // Ensure path starts with /
   const path = relativePath.startsWith('/') ? relativePath : `/${relativePath}`;
   return `${BACKEND_BASE_URL}${path}`;

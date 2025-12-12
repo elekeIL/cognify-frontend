@@ -1512,10 +1512,10 @@ export default function LearningPage() {
                         </div>
 
                         {/* Audio Player */}
-                        {lesson.audio_url && (
+                        {(lesson.audio_url || lesson.audio_path) && (
                             <AudioPlayer
                                 audio={{
-                                    url: getStaticUrl(lesson.audio_url) || '',
+                                    url: getStaticUrl(lesson.audio_url || lesson.audio_path) || '',
                                     duration: lesson.audio_duration || 0,
                                     generatedAt: lesson.created_at,
                                 }}
