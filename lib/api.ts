@@ -32,6 +32,7 @@ export const getStaticUrl = (relativePath: string | undefined | null): string | 
 // Token storage keys
 const ACCESS_TOKEN_KEY = 'cognify_access_token';
 const REFRESH_TOKEN_KEY = 'cognify_refresh_token';
+const REMEMBER_ME_KEY = 'cognify_remember_me';
 
 // Cookie helper functions
 const setCookie = (name: string, value: string, days: number = 7): void => {
@@ -39,35 +40,95 @@ const setCookie = (name: string, value: string, days: number = 7): void => {
   document.cookie = `${name}=${value}; expires=${expires}; path=/; SameSite=Lax`;
 };
 
+const setSessionCookie = (name: string, value: string): void => {
+  // Session cookie - no expires means it's deleted when browser closes
+  document.cookie = `${name}=${value}; path=/; SameSite=Lax`;
+};
+
 const deleteCookie = (name: string): void => {
   document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
 };
 
-// Token management
+// Token management with Remember Me support
 export const tokenStorage = {
+  /**
+   * Check if "Remember Me" was enabled during login
+   */
+  isRememberMe: (): boolean => {
+    if (typeof window === 'undefined') return false;
+    return localStorage.getItem(REMEMBER_ME_KEY) === 'true';
+  },
+
+  /**
+   * Get the appropriate storage based on Remember Me setting
+   */
+  getStorage: (): Storage | null => {
+    if (typeof window === 'undefined') return null;
+    // If rememberMe is true, use localStorage (persistent)
+    // If false or not set, check sessionStorage first, then localStorage for backwards compatibility
+    return tokenStorage.isRememberMe() ? localStorage : sessionStorage;
+  },
+
   getAccessToken: (): string | null => {
     if (typeof window === 'undefined') return null;
+    // Check sessionStorage first (for non-remember-me sessions)
+    const sessionToken = sessionStorage.getItem(ACCESS_TOKEN_KEY);
+    if (sessionToken) return sessionToken;
+    // Fall back to localStorage (for remember-me sessions or backwards compatibility)
     return localStorage.getItem(ACCESS_TOKEN_KEY);
   },
 
   getRefreshToken: (): string | null => {
     if (typeof window === 'undefined') return null;
+    // Check sessionStorage first (for non-remember-me sessions)
+    const sessionToken = sessionStorage.getItem(REFRESH_TOKEN_KEY);
+    if (sessionToken) return sessionToken;
+    // Fall back to localStorage (for remember-me sessions or backwards compatibility)
     return localStorage.getItem(REFRESH_TOKEN_KEY);
   },
 
-  setTokens: (accessToken: string, refreshToken: string): void => {
+  /**
+   * Store tokens with Remember Me preference
+   * @param accessToken - JWT access token
+   * @param refreshToken - JWT refresh token
+   * @param rememberMe - If true, persist across browser sessions; if false, clear on browser close
+   */
+  setTokens: (accessToken: string, refreshToken: string, rememberMe: boolean = true): void => {
     if (typeof window === 'undefined') return;
-    localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
-    localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
-    // Also set cookie for middleware to read
-    setCookie(ACCESS_TOKEN_KEY, accessToken);
+
+    // Clear any existing tokens from both storages first
+    sessionStorage.removeItem(ACCESS_TOKEN_KEY);
+    sessionStorage.removeItem(REFRESH_TOKEN_KEY);
+    localStorage.removeItem(ACCESS_TOKEN_KEY);
+    localStorage.removeItem(REFRESH_TOKEN_KEY);
+
+    // Store the remember me preference in localStorage (always persistent)
+    localStorage.setItem(REMEMBER_ME_KEY, rememberMe.toString());
+
+    if (rememberMe) {
+      // Use localStorage for persistent storage
+      localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
+      localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
+      // Set persistent cookie for middleware
+      setCookie(ACCESS_TOKEN_KEY, accessToken, 7);
+    } else {
+      // Use sessionStorage for session-only storage
+      sessionStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
+      sessionStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
+      // Set session cookie (no expiry) for middleware
+      setSessionCookie(ACCESS_TOKEN_KEY, accessToken);
+    }
   },
 
   clearTokens: (): void => {
     if (typeof window === 'undefined') return;
+    // Clear from both storages
     localStorage.removeItem(ACCESS_TOKEN_KEY);
     localStorage.removeItem(REFRESH_TOKEN_KEY);
-    // Also clear cookie
+    localStorage.removeItem(REMEMBER_ME_KEY);
+    sessionStorage.removeItem(ACCESS_TOKEN_KEY);
+    sessionStorage.removeItem(REFRESH_TOKEN_KEY);
+    // Clear cookie
     deleteCookie(ACCESS_TOKEN_KEY);
   },
 
@@ -154,7 +215,8 @@ api.interceptors.response.use(
         });
 
         const { access_token, refresh_token } = response.data;
-        tokenStorage.setTokens(access_token, refresh_token);
+        // Preserve the rememberMe preference when refreshing tokens
+        tokenStorage.setTokens(access_token, refresh_token, tokenStorage.isRememberMe());
 
         processQueue(null, access_token);
 
@@ -237,8 +299,29 @@ export const authApi = {
     });
   },
 
-  forgotPassword: async (email: string): Promise<void> => {
-    await api.post('/auth/forgot-password', { email });
+  // Step 1: Request password reset OTP
+  forgotPassword: async (email: string): Promise<{ message: string }> => {
+    const response = await api.post<{ message: string }>('/auth/forgot-password', { email });
+    return response.data;
+  },
+
+  // Step 2: Verify OTP
+  verifyResetOTP: async (email: string, otp: string): Promise<{ message: string; reset_token: string }> => {
+    const response = await api.post<{ message: string; reset_token: string }>('/auth/forgot-password/verify', {
+      email,
+      otp,
+    });
+    return response.data;
+  },
+
+  // Step 3: Reset password with token
+  resetPassword: async (email: string, resetToken: string, newPassword: string): Promise<{ message: string }> => {
+    const response = await api.post<{ message: string }>('/auth/forgot-password/reset', {
+      email,
+      reset_token: resetToken,
+      new_password: newPassword,
+    });
+    return response.data;
   },
 
   deleteAccount: async (): Promise<void> => {
@@ -510,6 +593,10 @@ export interface SearchResult {
   description?: string;
   created_at: string;
   relevance_score: number;
+  // Additional fields for routing
+  document_id?: string;  // For lessons, this is used for /learning/{document_id} navigation
+  status?: string;  // For documents (pending, processing, completed, failed)
+  is_completed?: boolean;  // For lessons
 }
 
 export interface SearchResponse {

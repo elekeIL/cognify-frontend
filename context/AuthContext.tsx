@@ -4,11 +4,16 @@ import React, { createContext, useContext, useState, useEffect, useCallback } fr
 import { useRouter, usePathname } from 'next/navigation';
 import { authApi, tokenStorage, User, LoginCredentials, RegisterData, TokenResponse } from '@/lib/api';
 
+interface LoginOptions {
+  credentials: LoginCredentials;
+  rememberMe?: boolean;
+}
+
 interface AuthContextType {
   user: User | null;
   isLoading: boolean;
   isAuthenticated: boolean;
-  login: (credentials: LoginCredentials) => Promise<void>;
+  login: (options: LoginOptions) => Promise<void>;
   register: (data: RegisterData) => Promise<void>;
   logout: () => void;
   refreshUser: () => Promise<void>;
@@ -90,9 +95,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }, [isAuthenticated, isLoading, isPublicRoute, pathname, router]);
 
   // Login function
-  const login = useCallback(async (credentials: LoginCredentials) => {
+  const login = useCallback(async ({ credentials, rememberMe = false }: LoginOptions) => {
     const response: TokenResponse = await authApi.login(credentials);
-    tokenStorage.setTokens(response.access_token, response.refresh_token);
+    // Store tokens with rememberMe preference
+    tokenStorage.setTokens(response.access_token, response.refresh_token, rememberMe);
 
     // Fetch user data
     const userData = await authApi.getMe();
@@ -102,10 +108,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
     router.push('/dashboard');
   }, [router]);
 
-  // Register function
+  // Register function - defaults to rememberMe=true for new users
   const register = useCallback(async (data: RegisterData) => {
     const response: TokenResponse = await authApi.register(data);
-    tokenStorage.setTokens(response.access_token, response.refresh_token);
+    // New users default to being remembered
+    tokenStorage.setTokens(response.access_token, response.refresh_token, true);
 
     // Fetch user data
     const userData = await authApi.getMe();

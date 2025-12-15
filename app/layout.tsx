@@ -11,7 +11,12 @@ export const metadata: Metadata = {
     title: "Cognify | AI-Powered Learning Platform",
     description: "Transform documents into personalized learning experiences",
     icons: {
-        icon: "/images/favicon.ico",
+        icon: [
+            { url: "/icon.svg", type: "image/svg+xml" },
+        ],
+        apple: [
+            { url: "/apple-icon.svg", type: "image/svg+xml" },
+        ],
     },
 };
 

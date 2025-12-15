@@ -771,24 +771,28 @@ export default function LearningPage() {
 
     // Save time spent to backend
     const saveTimeSpent = useCallback(async (forceSync = false) => {
-        if (!lesson) return;
+        if (!lesson?.id) return;
 
         const now = Date.now();
         const sessionSeconds = Math.floor((now - sessionStartTime.current) / 1000);
         const unsavedSeconds = sessionSeconds - lastSavedTime.current;
 
-        // Only save if there's meaningful time to save (at least 5 seconds)
+        // Only save if there's meaningful time to save (at least 1 second, or 5 for regular saves)
+        if (unsavedSeconds <= 0) return;
         if (unsavedSeconds < 5 && !forceSync) return;
+
+        const timeToSave = Math.floor(Math.max(0, unsavedSeconds));
+        if (timeToSave <= 0) return;
 
         try {
             await lessonsApi.updateProgress(lesson.id, {
-                time_spent_seconds: unsavedSeconds,
+                time_spent_seconds: timeToSave,
             });
             lastSavedTime.current = sessionSeconds;
         } catch (err) {
             console.error('Failed to save time spent:', err);
         }
-    }, [lesson]);
+    }, [lesson?.id]);
 
     // Time tracking effect - saves every 30 seconds and on page leave
     useEffect(() => {
@@ -926,11 +930,33 @@ export default function LearningPage() {
             try {
                 const completed = JSON.parse(lesson.outcomes_completed);
                 if (Array.isArray(completed)) {
-                    setCompletedOutcomes(new Set(completed));
+                    // Normalize IDs - handles various formats:
+                    // - Integer format: [0, 1, 2] -> ["lo0", "lo1", "lo2"]
+                    // - String number format: ["0", "1"] -> ["lo0", "lo1"]
+                    // - AI format: ["lo1", "lo2"] -> ["lo1", "lo2"] (keep as-is)
+                    const normalizedIds = completed.map((item: string | number) => {
+                        if (typeof item === 'number') {
+                            return `lo${item}`;
+                        }
+                        if (typeof item === 'string') {
+                            // If it already starts with "lo", keep it as-is
+                            if (item.startsWith('lo')) {
+                                return item;
+                            }
+                            // Otherwise, it's a numeric string - convert to lo{n}
+                            return `lo${item}`;
+                        }
+                        return String(item);
+                    });
+                    setCompletedOutcomes(new Set(normalizedIds));
                 }
             } catch {
                 // Ignore parse errors
+                setCompletedOutcomes(new Set());
             }
+        } else {
+            // No outcomes_completed data - reset to empty
+            setCompletedOutcomes(new Set());
         }
     }, [lesson?.outcomes_completed]);
 
@@ -1005,7 +1031,7 @@ export default function LearningPage() {
     };
 
     const completionPercent = learningOutcomes.length > 0
-        ? Math.round((completedOutcomes.size / learningOutcomes.length) * 100)
+        ? Math.min(Math.round((completedOutcomes.size / learningOutcomes.length) * 100), 100)
         : 0;
 
     const formatDate = (iso: string) => {
@@ -1029,8 +1055,10 @@ export default function LearningPage() {
     const handleMarkComplete = async () => {
         if (!lesson) return;
         try {
-            await lessonsApi.markComplete(lesson.id);
-            setLesson(prev => prev ? { ...prev, is_completed: true, progress_percentage: 100 } : null);
+            const updatedLesson = await lessonsApi.markComplete(lesson.id);
+            // Update lesson state with the response from backend
+            setLesson(updatedLesson);
+            // The useEffect watching lesson.outcomes_completed will update completedOutcomes
         } catch (err) {
             console.error("Failed to mark lesson as complete:", err);
         }

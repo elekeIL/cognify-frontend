@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { Bell, Search, Menu, Moon, Sun, LogOut, User, Settings, Brain, Check } from "lucide-react";
+import { Bell, Search, Menu, Moon, Sun, LogOut, User, Settings, Brain, Check, FileText, BookOpen, Loader2, ArrowRight, CheckCircle2 } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useAuth } from "@/context/AuthContext";
 import { notificationsApi, searchApi, Notification as ApiNotification, SearchResult } from "@/lib/api";
@@ -26,10 +26,12 @@ export function DashboardHeader() {
     const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
     const [showSearchResults, setShowSearchResults] = useState(false);
     const [isSearching, setIsSearching] = useState(false);
+    const [selectedIndex, setSelectedIndex] = useState(-1);
 
     const userMenuRef = useRef<HTMLDivElement>(null);
     const notificationsRef = useRef<HTMLDivElement>(null);
     const searchRef = useRef<HTMLDivElement>(null);
+    const searchInputRef = useRef<HTMLInputElement>(null);
 
     // Get user initials for avatar
     const getUserInitials = () => {
@@ -93,23 +95,96 @@ export function DashboardHeader() {
         setShowNotifications(false);
     };
 
+    // Get the correct route for a search result
+    const getSearchResultUrl = (result: SearchResult): string => {
+        if (result.type === "lesson") {
+            // Lessons navigate to /learning/{document_id}
+            return `/learning/${result.document_id || result.id}`;
+        }
+        // Documents navigate to /learning/{document_id} if completed, otherwise /documents
+        if (result.status === "completed") {
+            return `/learning/${result.document_id || result.id}`;
+        }
+        return `/documents`;
+    };
+
+    // Handle search result selection (keyboard or click)
+    const handleSelectResult = (result: SearchResult) => {
+        const url = getSearchResultUrl(result);
+        router.push(url);
+        setShowSearchResults(false);
+        setSearchQuery("");
+        setSelectedIndex(-1);
+    };
+
+    // Handle keyboard navigation in search
+    const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (!showSearchResults || searchResults.length === 0) {
+            if (e.key === "Escape") {
+                setShowSearchResults(false);
+                searchInputRef.current?.blur();
+            }
+            return;
+        }
+
+        switch (e.key) {
+            case "ArrowDown":
+                e.preventDefault();
+                setSelectedIndex((prev) =>
+                    prev < searchResults.length - 1 ? prev + 1 : 0
+                );
+                break;
+            case "ArrowUp":
+                e.preventDefault();
+                setSelectedIndex((prev) =>
+                    prev > 0 ? prev - 1 : searchResults.length - 1
+                );
+                break;
+            case "Enter":
+                e.preventDefault();
+                if (selectedIndex >= 0 && selectedIndex < searchResults.length) {
+                    handleSelectResult(searchResults[selectedIndex]);
+                }
+                break;
+            case "Escape":
+                e.preventDefault();
+                setShowSearchResults(false);
+                setSelectedIndex(-1);
+                searchInputRef.current?.blur();
+                break;
+        }
+    };
+
     // Debounced search
     useEffect(() => {
+        // Show dropdown immediately when user types anything
+        if (searchQuery.trim().length >= 1) {
+            setShowSearchResults(true);
+        } else {
+            setShowSearchResults(false);
+            setSearchResults([]);
+            setSelectedIndex(-1);
+            return;
+        }
+
+        // Only search if 2+ characters
+        if (searchQuery.trim().length < 2) {
+            setSearchResults([]);
+            setSelectedIndex(-1);
+            return;
+        }
+
         const timeoutId = setTimeout(async () => {
-            if (searchQuery.trim().length >= 2) {
-                setIsSearching(true);
-                try {
-                    const response = await searchApi.search(searchQuery);
-                    setSearchResults(response.results.slice(0, 5));
-                    setShowSearchResults(true);
-                } catch (error) {
-                    console.error("Search failed:", error);
-                }
-                setIsSearching(false);
-            } else {
+            setIsSearching(true);
+            setSelectedIndex(-1);
+            try {
+                const response = await searchApi.search(searchQuery);
+                setSearchResults(response.results.slice(0, 8));
+            } catch (error) {
+                console.error("Search failed:", error);
                 setSearchResults([]);
-                setShowSearchResults(false);
             }
+            setIsSearching(false);
         }, 300);
 
         return () => clearTimeout(timeoutId);
@@ -166,60 +241,128 @@ export function DashboardHeader() {
                     <div className="relative w-full max-w-md" ref={searchRef}>
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
                         <input
+                            ref={searchInputRef}
                             type="search"
                             placeholder="Search documents, lessons..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             onFocus={() => searchResults.length > 0 && setShowSearchResults(true)}
+                            onKeyDown={handleSearchKeyDown}
                             className="w-full h-10 pl-10 pr-4 text-sm bg-gray-100 dark:bg-gray-800 border-0 rounded-lg text-gray-900 dark:text-white placeholder:text-gray-500 focus:ring-2 focus:ring-blue-500 focus:bg-white dark:focus:bg-gray-700 transition-all outline-none"
                         />
+                        {isSearching && (
+                            <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 animate-spin" />
+                        )}
 
                         {/* Search Results Dropdown */}
                         {showSearchResults && (
                             <div className="absolute top-full left-0 right-0 mt-2 rounded-xl bg-white dark:bg-gray-800 shadow-2xl ring-1 ring-black/5 border border-gray-200 dark:border-gray-700 overflow-hidden z-50">
                                 {isSearching ? (
-                                    <div className="p-4 text-center text-sm text-gray-500 dark:text-gray-400">
-                                        Searching...
+                                    <div className="p-4 flex items-center justify-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+                                        <Loader2 className="h-4 w-4 animate-spin" />
+                                        <span>Searching...</span>
                                     </div>
                                 ) : searchResults.length > 0 ? (
                                     <>
-                                        <div className="max-h-64 overflow-y-auto">
-                                            {searchResults.map((result) => (
-                                                <Link
+                                        {/* Results header */}
+                                        <div className="px-3 py-2 border-b border-gray-100 dark:border-gray-700">
+                                            <p className="text-xs font-medium text-gray-500 dark:text-gray-400">
+                                                {searchResults.length} result{searchResults.length !== 1 ? 's' : ''} found
+                                            </p>
+                                        </div>
+                                        <div className="max-h-80 overflow-y-auto">
+                                            {searchResults.map((result, index) => (
+                                                <button
                                                     key={`${result.type}-${result.id}`}
-                                                    href={result.type === 'lesson' ? `/learning/${result.id}` : `/documents/${result.id}`}
-                                                    onClick={() => {
-                                                        setShowSearchResults(false);
-                                                        setSearchQuery("");
-                                                    }}
-                                                    className="block p-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 border-b border-gray-100 dark:border-gray-700 last:border-0"
+                                                    onClick={() => handleSelectResult(result)}
+                                                    className={`w-full text-left p-3 flex items-start gap-3 transition-colors border-b border-gray-100 dark:border-gray-700 last:border-0 ${
+                                                        index === selectedIndex
+                                                            ? 'bg-blue-50 dark:bg-blue-900/20'
+                                                            : 'hover:bg-gray-50 dark:hover:bg-gray-700/50'
+                                                    }`}
                                                 >
-                                                    <div className="flex items-center gap-3">
-                                                        <span className={`text-xs px-2 py-0.5 rounded font-medium ${
-                                                            result.type === 'lesson'
-                                                                ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300'
-                                                                : 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'
-                                                        }`}>
-                                                            {result.type}
-                                                        </span>
-                                                        <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
-                                                            {result.title}
-                                                        </p>
+                                                    {/* Type Icon */}
+                                                    <div className={`flex-shrink-0 w-9 h-9 rounded-lg flex items-center justify-center ${
+                                                        result.type === 'lesson'
+                                                            ? 'bg-purple-100 dark:bg-purple-900/30'
+                                                            : 'bg-blue-100 dark:bg-blue-900/30'
+                                                    }`}>
+                                                        {result.type === 'lesson' ? (
+                                                            <BookOpen className={`w-4 h-4 ${
+                                                                result.is_completed
+                                                                    ? 'text-green-600 dark:text-green-400'
+                                                                    : 'text-purple-600 dark:text-purple-400'
+                                                            }`} />
+                                                        ) : (
+                                                            <FileText className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                                                        )}
                                                     </div>
-                                                    {result.description && (
-                                                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 truncate">
-                                                            {result.description}
-                                                        </p>
-                                                    )}
-                                                </Link>
+
+                                                    {/* Content */}
+                                                    <div className="flex-1 min-w-0">
+                                                        <div className="flex items-center gap-2">
+                                                            <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                                                                {result.title}
+                                                            </p>
+                                                            {result.type === 'lesson' && result.is_completed && (
+                                                                <CheckCircle2 className="w-3.5 h-3.5 text-green-500 flex-shrink-0" />
+                                                            )}
+                                                        </div>
+                                                        <div className="flex items-center gap-2 mt-0.5">
+                                                            <span className={`text-xs px-1.5 py-0.5 rounded font-medium ${
+                                                                result.type === 'lesson'
+                                                                    ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300'
+                                                                    : 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'
+                                                            }`}>
+                                                                {result.type}
+                                                            </span>
+                                                            {result.description && (
+                                                                <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                                                                    {result.description}
+                                                                </p>
+                                                            )}
+                                                        </div>
+                                                    </div>
+
+                                                    {/* Arrow indicator */}
+                                                    <ArrowRight className={`w-4 h-4 flex-shrink-0 mt-2.5 transition-opacity ${
+                                                        index === selectedIndex
+                                                            ? 'text-blue-500 opacity-100'
+                                                            : 'text-gray-300 dark:text-gray-600 opacity-0 group-hover:opacity-100'
+                                                    }`} />
+                                                </button>
                                             ))}
                                         </div>
+                                        {/* Keyboard hint */}
+                                        <div className="px-3 py-2 border-t border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
+                                            <p className="text-xs text-gray-400 dark:text-gray-500">
+                                                <kbd className="px-1.5 py-0.5 bg-gray-200 dark:bg-gray-700 rounded text-[10px] font-mono">↑</kbd>
+                                                <kbd className="px-1.5 py-0.5 bg-gray-200 dark:bg-gray-700 rounded text-[10px] font-mono ml-1">↓</kbd>
+                                                <span className="ml-1.5">to navigate</span>
+                                                <kbd className="px-1.5 py-0.5 bg-gray-200 dark:bg-gray-700 rounded text-[10px] font-mono ml-3">Enter</kbd>
+                                                <span className="ml-1.5">to select</span>
+                                                <kbd className="px-1.5 py-0.5 bg-gray-200 dark:bg-gray-700 rounded text-[10px] font-mono ml-3">Esc</kbd>
+                                                <span className="ml-1.5">to close</span>
+                                            </p>
+                                        </div>
                                     </>
-                                ) : (
-                                    <div className="p-4 text-center text-sm text-gray-500 dark:text-gray-400">
-                                        No results found
+                                ) : searchQuery.trim().length >= 2 ? (
+                                    <div className="p-6 text-center">
+                                        <Search className="w-8 h-8 text-gray-300 dark:text-gray-600 mx-auto mb-2" />
+                                        <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                                            No results found
+                                        </p>
+                                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                            Try searching with different keywords
+                                        </p>
                                     </div>
-                                )}
+                                ) : searchQuery.trim().length === 1 ? (
+                                    <div className="p-4 text-center">
+                                        <p className="text-sm text-gray-500 dark:text-gray-400">
+                                            Type one more character to search...
+                                        </p>
+                                    </div>
+                                ) : null}
                             </div>
                         )}
                     </div>

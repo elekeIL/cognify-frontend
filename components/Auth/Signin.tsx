@@ -112,18 +112,15 @@ const Signin = () => {
 
     try {
       await login({
-        email: data.email,
-        password: data.password,
+        credentials: {
+          email: data.email,
+          password: data.password,
+        },
+        rememberMe: rememberMe,
       });
 
       // Success - the auth context will handle redirect
       setSuccessMessage("Sign in successful! Redirecting...");
-
-      // Store remember me preference if needed
-      if (rememberMe) {
-        localStorage.setItem("rememberMe", "true");
-        localStorage.setItem("userEmail", data.email);
-      }
 
     } catch (error) {
       const axiosError = error as AxiosError<{ detail: string }>;
