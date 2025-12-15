@@ -1,50 +1,75 @@
 "use client";
+import { useRef } from "react";
 import { Upload, Brain, FileText, Volume2, Link2, Zap } from "lucide-react";
+import { motion, useScroll, useTransform, useSpring, useInView, Variants } from "framer-motion";
 
 const Features = () => {
+    const containerRef = useRef<HTMLElement>(null);
+    const headerRef = useRef(null);
+    const isHeaderInView = useInView(headerRef, { once: true, margin: "-100px" });
+
+    const { scrollYProgress } = useScroll({
+        target: containerRef,
+        offset: ["start end", "end start"],
+    });
+
+    const smoothProgress = useSpring(scrollYProgress, {
+        stiffness: 100,
+        damping: 30,
+        restDelta: 0.001,
+    });
+
+    const backgroundY = useTransform(smoothProgress, [0, 1], ["0%", "20%"]);
+
     const features = [
         {
             id: 1,
             icon: Upload,
             title: "Multi-Format Upload",
             description: "Upload PDF, TXT, or DOCX files seamlessly. Our intelligent parser handles various document structures and extracts content accurately.",
-            color: "blue"
+            color: "blue",
+            gradient: "from-blue-500 to-cyan-500",
         },
         {
             id: 2,
             icon: Brain,
             title: "AI Theme Extraction",
             description: "Advanced AI analyzes your content and identifies 3-7 key themes, ensuring learners focus on what matters most for workplace application.",
-            color: "purple"
+            color: "purple",
+            gradient: "from-purple-500 to-pink-500",
         },
         {
             id: 3,
             icon: FileText,
             title: "Concise Lessons",
             description: "Get workplace-ready lessons (250-400 words) that distill complex materials into actionable insights employees can apply immediately.",
-            color: "green"
+            color: "green",
+            gradient: "from-green-500 to-emerald-500",
         },
         {
             id: 4,
             icon: Volume2,
             title: "Voice Narration",
             description: "Every lesson includes high-quality AI voice narration, perfect for learning on-the-go or accommodating different learning styles.",
-            color: "orange"
+            color: "orange",
+            gradient: "from-orange-500 to-amber-500",
         },
         {
             id: 5,
             icon: Link2,
             title: "Source Citations",
             description: "Maintain credibility with automatic citations. Each lesson references the top 2-3 source snippets with line and paragraph references.",
-            color: "pink"
+            color: "pink",
+            gradient: "from-pink-500 to-rose-500",
         },
         {
             id: 6,
             icon: Zap,
             title: "Instant Processing",
             description: "Transform documents into complete learning experiences in seconds. No waiting, no manual work—just upload and learn.",
-            color: "indigo"
-        }
+            color: "indigo",
+            gradient: "from-indigo-500 to-violet-500",
+        },
     ];
 
     const getColorClasses = (color: string) => {
@@ -54,7 +79,7 @@ const Features = () => {
             green: "bg-green-500",
             orange: "bg-orange-500",
             pink: "bg-pink-500",
-            indigo: "bg-indigo-500"
+            indigo: "bg-indigo-500",
         };
         return colors[color];
     };
@@ -66,64 +91,181 @@ const Features = () => {
             green: "group-hover:bg-green-50 dark:group-hover:bg-green-950/30",
             orange: "group-hover:bg-orange-50 dark:group-hover:bg-orange-950/30",
             pink: "group-hover:bg-pink-50 dark:group-hover:bg-pink-950/30",
-            indigo: "group-hover:bg-indigo-50 dark:group-hover:bg-indigo-950/30"
+            indigo: "group-hover:bg-indigo-50 dark:group-hover:bg-indigo-950/30",
         };
         return colors[color];
     };
 
-    return (
-        <section id="features" className="py-20 lg:py-28 xl:py-32 bg-white dark:bg-black">
-            <div className="mx-auto max-w-7xl px-4 md:px-8 xl:px-0">
-                {/* Section Header */}
-                <div className="mx-auto text-center max-w-3xl mb-16">
+    const getShadowColor = (color: string) => {
+        const shadows: Record<string, string> = {
+            blue: "group-hover:shadow-blue-500/25",
+            purple: "group-hover:shadow-purple-500/25",
+            green: "group-hover:shadow-green-500/25",
+            orange: "group-hover:shadow-orange-500/25",
+            pink: "group-hover:shadow-pink-500/25",
+            indigo: "group-hover:shadow-indigo-500/25",
+        };
+        return shadows[color];
+    };
 
-                    <h2 className="text-3xl md:text-4xl xl:text-5xl font-bold text-gray-900 dark:text-white mb-4">
-                        Everything You Need to Transform Learning
-                    </h2>
-                    <p className="text-lg text-gray-600 dark:text-gray-300">
+    const containerVariants: Variants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.1,
+                delayChildren: 0.2,
+            },
+        },
+    };
+
+    const cardVariants: Variants = {
+        hidden: { opacity: 0, y: 50, scale: 0.9 },
+        visible: (i: number) => ({
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            transition: {
+                delay: i * 0.1,
+                duration: 0.6,
+                ease: [0.22, 1, 0.36, 1],
+            },
+        }),
+    };
+
+    return (
+        <section
+            ref={containerRef}
+            id="features"
+            className="relative py-20 lg:py-28 xl:py-32 bg-white dark:bg-black overflow-hidden"
+        >
+            {/* Animated Background */}
+            <motion.div className="absolute inset-0" style={{ y: backgroundY }}>
+                <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-200/30 dark:bg-blue-500/10 rounded-full blur-3xl" />
+                <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-200/30 dark:bg-purple-500/10 rounded-full blur-3xl" />
+            </motion.div>
+
+            <div className="relative mx-auto max-w-7xl px-4 md:px-8 xl:px-0">
+                {/* Section Header */}
+                <motion.div
+                    ref={headerRef}
+                    className="mx-auto text-center max-w-3xl mb-16"
+                    initial={{ opacity: 0, y: 40 }}
+                    animate={isHeaderInView ? { opacity: 1, y: 0 } : {}}
+                    transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                >
+                    <motion.h2
+                        className="text-3xl md:text-4xl xl:text-5xl font-bold text-gray-900 dark:text-white mb-4"
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={isHeaderInView ? { opacity: 1, y: 0 } : {}}
+                        transition={{ duration: 0.8, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+                    >
+                        Everything You Need to{" "}
+                        <span className="relative inline-block">
+                            <span className="relative z-10 text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
+                                Transform Learning
+                            </span>
+                            <motion.span
+                                className="absolute bottom-2 left-0 w-full h-3 bg-purple-200 dark:bg-purple-900/50 -z-0"
+                                initial={{ scaleX: 0 }}
+                                animate={isHeaderInView ? { scaleX: 1 } : {}}
+                                transition={{ duration: 0.8, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                                style={{ originX: 0 }}
+                            />
+                        </span>
+                    </motion.h2>
+                    <motion.p
+                        className="text-lg text-gray-600 dark:text-gray-300"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={isHeaderInView ? { opacity: 1, y: 0 } : {}}
+                        transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                    >
                         Cognify combines cutting-edge AI with intuitive design to create
                         engaging, actionable learning experiences from any document.
-                    </p>
-                </div>
+                    </motion.p>
+                </motion.div>
 
                 {/* Features Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 xl:gap-10">
-                    {features.map((feature) => {
+                <motion.div
+                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 xl:gap-10"
+                    variants={containerVariants}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: "-50px" }}
+                >
+                    {features.map((feature, index) => {
                         const Icon = feature.icon;
                         return (
-                            <div
+                            <motion.div
                                 key={feature.id}
-                                className={`group relative rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-8 shadow-sm hover:shadow-xl transition-all duration-300 ${getHoverColorClasses(feature.color)}`}
+                                custom={index}
+                                variants={cardVariants}
+                                className={`group relative rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-8 shadow-sm hover:shadow-2xl transition-all duration-500 ${getHoverColorClasses(feature.color)} ${getShadowColor(feature.color)} overflow-hidden`}
+                                whileHover={{ y: -8, scale: 1.02 }}
+                                transition={{ type: "spring", stiffness: 300, damping: 20 }}
                             >
+                                {/* Gradient Border on Hover */}
+                                <motion.div
+                                    className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`}
+                                    style={{ padding: "2px" }}
+                                    initial={false}
+                                >
+                                    <div className="absolute inset-[2px] rounded-2xl bg-white dark:bg-gray-900" />
+                                </motion.div>
+
                                 {/* Icon */}
-                                <div className={`relative flex h-14 w-14 items-center justify-center rounded-xl ${getColorClasses(feature.color)} mb-6 group-hover:scale-110 transition-transform duration-300`}>
+                                <motion.div
+                                    className={`relative flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br ${feature.gradient} mb-6 shadow-lg`}
+                                    whileHover={{ scale: 1.1, rotate: 5 }}
+                                    transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                                >
                                     <Icon className="w-7 h-7 text-white" />
-                                </div>
+                                    {/* Glow effect */}
+                                    <div className={`absolute inset-0 rounded-xl bg-gradient-to-br ${feature.gradient} blur-xl opacity-0 group-hover:opacity-50 transition-opacity duration-500`} />
+                                </motion.div>
 
                                 {/* Content */}
-                                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
+                                <h3 className="relative text-xl font-semibold text-gray-900 dark:text-white mb-3">
                                     {feature.title}
                                 </h3>
-                                <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                                <p className="relative text-gray-600 dark:text-gray-400 leading-relaxed">
                                     {feature.description}
                                 </p>
 
-                                {/* Hover gradient effect */}
-                                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-transparent to-transparent group-hover:from-white/5 group-hover:to-transparent pointer-events-none transition-all duration-300" />
-                            </div>
+                                {/* Corner decoration */}
+                                <motion.div
+                                    className={`absolute -bottom-10 -right-10 w-32 h-32 bg-gradient-to-br ${feature.gradient} rounded-full opacity-0 group-hover:opacity-10 dark:group-hover:opacity-20 blur-2xl transition-opacity duration-500`}
+                                />
+                            </motion.div>
                         );
                     })}
-                </div>
+                </motion.div>
 
                 {/* Bottom CTA */}
-                <div className="mt-16 text-center">
+                <motion.div
+                    className="mt-16 text-center"
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-50px" }}
+                    transition={{ duration: 0.8, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                >
                     <p className="text-gray-600 dark:text-gray-400 mb-6">
                         Ready to revolutionize your team's learning?
                     </p>
-                    <button className="px-8 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-medium rounded-lg hover:shadow-lg hover:scale-105 transition-all duration-200">
-                        Get Started
-                    </button>
-                </div>
+                    <motion.button
+                        className="relative px-8 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-medium rounded-xl shadow-lg shadow-blue-500/25 overflow-hidden group"
+                        whileHover={{ scale: 1.05, y: -2 }}
+                        whileTap={{ scale: 0.95 }}
+                    >
+                        {/* Shine effect */}
+                        <motion.div
+                            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                            animate={{ x: ["-100%", "100%"] }}
+                            transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 2 }}
+                        />
+                        <span className="relative z-10">Get Started</span>
+                    </motion.button>
+                </motion.div>
             </div>
         </section>
     );

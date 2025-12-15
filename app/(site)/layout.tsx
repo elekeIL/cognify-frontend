@@ -6,10 +6,15 @@ import Proivder from "./Provider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Solid | Next.js Template for Startup and SaaS",
-  description: "Built with Next.js and TypeScript",
+  title: "Cognify | AI-Powered Learning Platform",
+  description: "Transform documents into personalized learning experiences",
   icons: {
-    icon: "/images/favicon.ico",
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+    ],
+    apple: [
+      { url: "/apple-icon.svg", type: "image/svg+xml" },
+    ],
   },
 };
 

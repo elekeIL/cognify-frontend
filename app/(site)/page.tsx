@@ -10,13 +10,23 @@ import FAQ from "@/components/FAQ";
 import Pricing from "@/components/Pricing";
 import Testimonial from "@/components/Testimonial";
 import TrustSection from "@/components/Brands";
+import {Inter} from "next/font/google";
+
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Next.js Starter Template for SaaS Startups - Solid SaaS Boilerplate",
-
-  // other metadata
-  description: "This is Home for Solid Pro"
+    title: "Cognify | AI-Powered Learning Platform",
+    description: "Transform documents into personalized learning experiences",
+    icons: {
+        icon: [
+            { url: "/icon.svg", type: "image/svg+xml" },
+        ],
+        apple: [
+            { url: "/apple-icon.svg", type: "image/svg+xml" },
+        ],
+    },
 };
+
 
 export default function Home() {
   return (
