@@ -137,25 +137,25 @@ const Features = () => {
         <section
             ref={containerRef}
             id="features"
-            className="relative py-20 lg:py-28 xl:py-32 bg-white dark:bg-black overflow-hidden"
+            className="relative py-12 sm:py-16 lg:py-28 xl:py-32 bg-white dark:bg-black overflow-hidden"
         >
             {/* Animated Background */}
             <motion.div className="absolute inset-0" style={{ y: backgroundY }}>
-                <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-200/30 dark:bg-blue-500/10 rounded-full blur-3xl" />
-                <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-200/30 dark:bg-purple-500/10 rounded-full blur-3xl" />
+                <div className="absolute top-0 left-1/4 w-48 h-48 sm:w-72 sm:h-72 lg:w-96 lg:h-96 bg-blue-200/30 dark:bg-blue-500/10 rounded-full blur-3xl" />
+                <div className="absolute bottom-0 right-1/4 w-48 h-48 sm:w-72 sm:h-72 lg:w-96 lg:h-96 bg-purple-200/30 dark:bg-purple-500/10 rounded-full blur-3xl" />
             </motion.div>
 
-            <div className="relative mx-auto max-w-7xl px-4 md:px-8 xl:px-0">
+            <div className="relative mx-auto max-w-7xl px-4 sm:px-6 md:px-8 xl:px-0">
                 {/* Section Header */}
                 <motion.div
                     ref={headerRef}
-                    className="mx-auto text-center max-w-3xl mb-16"
+                    className="mx-auto text-center max-w-3xl mb-8 sm:mb-12 lg:mb-16 px-2"
                     initial={{ opacity: 0, y: 40 }}
                     animate={isHeaderInView ? { opacity: 1, y: 0 } : {}}
                     transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
                 >
                     <motion.h2
-                        className="text-3xl md:text-4xl xl:text-5xl font-bold text-gray-900 dark:text-white mb-4"
+                        className="text-2xl sm:text-3xl md:text-4xl xl:text-5xl font-bold text-gray-900 dark:text-white mb-3 sm:mb-4"
                         initial={{ opacity: 0, y: 30 }}
                         animate={isHeaderInView ? { opacity: 1, y: 0 } : {}}
                         transition={{ duration: 0.8, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
@@ -166,7 +166,7 @@ const Features = () => {
                                 Transform Learning
                             </span>
                             <motion.span
-                                className="absolute bottom-2 left-0 w-full h-3 bg-purple-200 dark:bg-purple-900/50 -z-0"
+                                className="absolute bottom-1 sm:bottom-2 left-0 w-full h-2 sm:h-3 bg-purple-200 dark:bg-purple-900/50 -z-0"
                                 initial={{ scaleX: 0 }}
                                 animate={isHeaderInView ? { scaleX: 1 } : {}}
                                 transition={{ duration: 0.8, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
@@ -175,7 +175,7 @@ const Features = () => {
                         </span>
                     </motion.h2>
                     <motion.p
-                        className="text-lg text-gray-600 dark:text-gray-300"
+                        className="text-sm sm:text-base lg:text-lg text-gray-600 dark:text-gray-300"
                         initial={{ opacity: 0, y: 20 }}
                         animate={isHeaderInView ? { opacity: 1, y: 0 } : {}}
                         transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
@@ -187,7 +187,7 @@ const Features = () => {
 
                 {/* Features Grid */}
                 <motion.div
-                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 xl:gap-10"
+                    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 xl:gap-10"
                     variants={containerVariants}
                     initial="hidden"
                     whileInView="visible"
@@ -200,41 +200,41 @@ const Features = () => {
                                 key={feature.id}
                                 custom={index}
                                 variants={cardVariants}
-                                className={`group relative rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-8 shadow-sm hover:shadow-2xl transition-all duration-500 ${getHoverColorClasses(feature.color)} ${getShadowColor(feature.color)} overflow-hidden`}
+                                className={`group relative rounded-xl sm:rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 sm:p-6 lg:p-8 shadow-sm hover:shadow-2xl transition-all duration-500 ${getHoverColorClasses(feature.color)} ${getShadowColor(feature.color)} overflow-hidden`}
                                 whileHover={{ y: -8, scale: 1.02 }}
                                 transition={{ type: "spring", stiffness: 300, damping: 20 }}
                             >
                                 {/* Gradient Border on Hover */}
                                 <motion.div
-                                    className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`}
+                                    className={`absolute inset-0 rounded-xl sm:rounded-2xl bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`}
                                     style={{ padding: "2px" }}
                                     initial={false}
                                 >
-                                    <div className="absolute inset-[2px] rounded-2xl bg-white dark:bg-gray-900" />
+                                    <div className="absolute inset-[2px] rounded-xl sm:rounded-2xl bg-white dark:bg-gray-900" />
                                 </motion.div>
 
                                 {/* Icon */}
                                 <motion.div
-                                    className={`relative flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br ${feature.gradient} mb-6 shadow-lg`}
+                                    className={`relative flex h-11 w-11 sm:h-12 sm:w-12 lg:h-14 lg:w-14 items-center justify-center rounded-lg sm:rounded-xl bg-gradient-to-br ${feature.gradient} mb-4 sm:mb-5 lg:mb-6 shadow-lg`}
                                     whileHover={{ scale: 1.1, rotate: 5 }}
                                     transition={{ type: "spring", stiffness: 400, damping: 10 }}
                                 >
-                                    <Icon className="w-7 h-7 text-white" />
+                                    <Icon className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 text-white" />
                                     {/* Glow effect */}
-                                    <div className={`absolute inset-0 rounded-xl bg-gradient-to-br ${feature.gradient} blur-xl opacity-0 group-hover:opacity-50 transition-opacity duration-500`} />
+                                    <div className={`absolute inset-0 rounded-lg sm:rounded-xl bg-gradient-to-br ${feature.gradient} blur-xl opacity-0 group-hover:opacity-50 transition-opacity duration-500`} />
                                 </motion.div>
 
                                 {/* Content */}
-                                <h3 className="relative text-xl font-semibold text-gray-900 dark:text-white mb-3">
+                                <h3 className="relative text-base sm:text-lg lg:text-xl font-semibold text-gray-900 dark:text-white mb-2 sm:mb-3">
                                     {feature.title}
                                 </h3>
-                                <p className="relative text-gray-600 dark:text-gray-400 leading-relaxed">
+                                <p className="relative text-sm sm:text-base text-gray-600 dark:text-gray-400 leading-relaxed">
                                     {feature.description}
                                 </p>
 
                                 {/* Corner decoration */}
                                 <motion.div
-                                    className={`absolute -bottom-10 -right-10 w-32 h-32 bg-gradient-to-br ${feature.gradient} rounded-full opacity-0 group-hover:opacity-10 dark:group-hover:opacity-20 blur-2xl transition-opacity duration-500`}
+                                    className={`absolute -bottom-10 -right-10 w-24 h-24 sm:w-32 sm:h-32 bg-gradient-to-br ${feature.gradient} rounded-full opacity-0 group-hover:opacity-10 dark:group-hover:opacity-20 blur-2xl transition-opacity duration-500`}
                                 />
                             </motion.div>
                         );
@@ -243,17 +243,17 @@ const Features = () => {
 
                 {/* Bottom CTA */}
                 <motion.div
-                    className="mt-16 text-center"
+                    className="mt-10 sm:mt-12 lg:mt-16 text-center px-4"
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "-50px" }}
                     transition={{ duration: 0.8, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
                 >
-                    <p className="text-gray-600 dark:text-gray-400 mb-6">
-                        Ready to revolutionize your team's learning?
+                    <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mb-4 sm:mb-6">
+                        Ready to revolutionize your team&apos;s learning?
                     </p>
                     <motion.button
-                        className="relative px-8 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-medium rounded-xl shadow-lg shadow-blue-500/25 overflow-hidden group"
+                        className="relative px-6 sm:px-8 py-2.5 sm:py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-medium rounded-xl shadow-lg shadow-blue-500/25 overflow-hidden group text-sm sm:text-base"
                         whileHover={{ scale: 1.05, y: -2 }}
                         whileTap={{ scale: 0.95 }}
                     >

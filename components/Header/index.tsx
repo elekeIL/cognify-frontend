@@ -116,83 +116,111 @@ const Header = () => {
           {/* Mobile Toggle */}
           <button
               onClick={() => setNavigationOpen(!navigationOpen)}
-              className="lg:hidden p-2 text-gray-700 dark:text-gray-300 z-50"
+              className={`lg:hidden p-2.5 rounded-xl z-50 transition-all duration-300 ${
+                  navigationOpen
+                      ? "bg-gray-100 dark:bg-gray-800"
+                      : stickyMenu
+                          ? "bg-gray-100 dark:bg-gray-800"
+                          : "bg-white/10 backdrop-blur-sm"
+              }`}
               aria-label="Toggle menu"
           >
-            {navigationOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {navigationOpen ? (
+                <X className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+            ) : (
+                <Menu className={`w-5 h-5 ${stickyMenu ? "text-gray-700 dark:text-gray-300" : "text-gray-700 dark:text-white"}`} />
+            )}
           </button>
 
           {/* Mobile Navigation */}
-          <div
-              className={`fixed inset-0 bg-white dark:bg-black z-40 lg:hidden transition-all duration-300 ${
-                  navigationOpen ? "opacity-100 visible" : "opacity-0 invisible"
-              }`}
-          >
-            <div className="flex flex-col items-center justify-center h-full px-8">
-              <nav className="w-full max-w-sm">
-                {isLanding && (
-                    <ul className="space-y-6">
-                      {menuItems.map((item, index) => (
-                          <li key={index} className="text-center">
-                            <a
-                                href={item.path}
-                                onClick={() => setNavigationOpen(false)}
-                                className={`block text-2xl font-medium transition-colors ${
-                                    pathUrl === item.path
-                                        ? "text-blue-600 dark:text-blue-400"
-                                        : "text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
-                                }`}
-                            >
-                              {item.title}
-                            </a>
-                          </li>
+          {navigationOpen && (
+              <div className="fixed inset-0 z-40 lg:hidden">
+                {/* Backdrop */}
+                <div
+                    className="absolute inset-0 bg-black/60"
+                    onClick={() => setNavigationOpen(false)}
+                />
+
+                {/* Menu Panel */}
+                <div className="absolute top-0 right-0 h-full w-[85%] max-w-[350px] bg-white dark:bg-gray-950 shadow-2xl">
+                  {/* Header */}
+                  <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900">
+                    <a href="/" className="flex items-center gap-2">
+                      <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-2 rounded-lg">
+                        <Brain className="w-5 h-5 text-white" />
+                      </div>
+                      <span className="text-lg font-bold text-gray-900 dark:text-white">
+                        Cognify
+                      </span>
+                    </a>
+                    <button
+                        onClick={() => setNavigationOpen(false)}
+                        className="p-2.5 rounded-full bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors"
+                    >
+                      <X className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+                    </button>
+                  </div>
+
+                  {/* Navigation Links */}
+                  <div className="p-4 space-y-2 bg-white dark:bg-gray-950">
+                    {isLanding && menuItems.map((item, index) => (
+                        <a
+                            key={index}
+                            href={item.path}
+                            onClick={() => setNavigationOpen(false)}
+                            className={`flex items-center px-4 py-3.5 rounded-xl text-base font-semibold transition-all duration-200 border ${
+                                pathUrl === item.path
+                                    ? "bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-800"
+                                    : "bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 border-gray-100 dark:border-gray-800 hover:bg-blue-50 dark:hover:bg-blue-950 hover:text-blue-600 dark:hover:text-blue-400"
+                            }`}
+                        >
+                          {item.title}
+                        </a>
+                    ))}
+                  </div>
+
+                  {/* Bottom Actions */}
+                  <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 space-y-3">
+                    <button
+                        onClick={toggleTheme}
+                        className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 font-medium border border-gray-200 dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                    >
+                      {mounted && (theme === "dark" ? (
+                          <>
+                            <Sun className="w-5 h-5" />
+                            Light Mode
+                          </>
+                      ) : (
+                          <>
+                            <Moon className="w-5 h-5" />
+                            Dark Mode
+                          </>
                       ))}
-                    </ul>
-                )}
+                    </button>
 
-                <div className="mt-12 space-y-4">
-                  <button
-                      onClick={toggleTheme}
-                      className="w-full flex items-center justify-center gap-2 p-3 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 font-medium"
-                  >
-                    {mounted &&
-                        (theme === "dark" ? (
-                            <>
-                              <Sun className="w-5 h-5" />
-                              Light Mode
-                            </>
-                        ) : (
-                            <>
-                              <Moon className="w-5 h-5" />
-                              Dark Mode
-                            </>
-                        ))}
-                  </button>
+                    {isLanding && (
+                        <>
+                          <a
+                              href="/auth/signin"
+                              onClick={() => setNavigationOpen(false)}
+                              className="block text-center px-5 py-3.5 border-2 border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 rounded-xl font-semibold text-sm bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                          >
+                            Sign In
+                          </a>
 
-                  {/* Mobile SignIn/GetStarted only on landing */}
-                  {isLanding && (
-                      <>
-                        <a
-                            href="/auth/signin"
-                            onClick={() => setNavigationOpen(false)}
-                            className="block text-center py-3 text-gray-700 dark:text-gray-300 font-medium"
-                        >
-                          Sign In
-                        </a>
-
-                        <a
-                            href="/auth/signup"
-                            onClick={() => setNavigationOpen(false)}
-                            className="block text-center py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-medium rounded-lg"
-                        >
-                          Get Started
-                        </a>
-                      </>
-                  )}
+                          <a
+                              href="/auth/signup"
+                              onClick={() => setNavigationOpen(false)}
+                              className="block text-center px-5 py-3.5 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-semibold text-sm shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 transition-all"
+                          >
+                            Get Started Free
+                          </a>
+                        </>
+                    )}
+                  </div>
                 </div>
-              </nav>
-            </div>
-          </div>
+              </div>
+          )}
         </div>
       </header>
   );
