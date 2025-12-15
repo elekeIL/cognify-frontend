@@ -134,18 +134,10 @@ const Signin = () => {
   };
 
   // Handle social login (placeholder for future OAuth implementation)
-  const handleSocialLogin = async (provider: string) => {
-    setIsLoading(true);
-    setErrors({});
-
-    try {
-      // For now, show a message that social login is not yet available
-      setErrors({
-        general: `Sign in with ${provider} is not yet available. Please use email and password.`
-      });
-    } finally {
-      setIsLoading(false);
-    }
+  const handleSocialLogin = (provider: string) => {
+    setErrors({
+      general: `${provider} sign in is not available yet. Please use email and password.`
+    });
   };
 
   return (

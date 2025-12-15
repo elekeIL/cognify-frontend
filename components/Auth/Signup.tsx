@@ -186,26 +186,11 @@ const Signup = () => {
   };
 
   // Handle social signup
-  const handleSocialSignup = async (provider: string) => {
-    setIsLoading(true);
-    setErrors({});
-
-    try {
-      // Simulate social signup
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      console.log("Signup with:", provider);
-      setSuccessMessage(`Creating account with ${provider}...`);
-
-      // In production, redirect to OAuth provider
-      // window.location.href = `/api/auth/${provider}/signup`;
-
-    } catch (error) {
-      setErrors({
-        general: `Failed to sign up with ${provider}. Please try again.`
-      });
-    } finally {
-      setIsLoading(false);
-    }
+  const handleSocialSignup = (provider: string) => {
+    const providerName = provider === 'google' ? 'Google' : 'GitHub';
+    setErrors({
+      general: `${providerName} sign up is not available yet. Please use email registration.`
+    });
   };
 
   // Password requirements
